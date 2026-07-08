@@ -1,0 +1,37 @@
+{
+  "name": "milkshop-erp",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite --port 3000 --host 0.0.0.0",
+    "dev:api": "wrangler pages dev --port 8787 --proxy 3000",
+    "dev:full": "wrangler pages dev --port 8788",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name milkshop-erp",
+    "db:migrate:local": "wrangler d1 migrations apply milkshop-db --local",
+    "db:seed": "wrangler d1 execute milkshop-db --local --file=./migrations/seed.sql",
+    "db:reset": "wrangler d1 migrations apply milkshop-db --local && wrangler d1 execute milkshop-db --local --file=./migrations/seed.sql"
+  },
+  "dependencies": {
+    "hono": "^4.12.27",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.1",
+    "recharts": "^2.15.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250705.0",
+    "@hono/vite-cloudflare-pages": "^0.4.3",
+    "@tailwindcss/vite": "^4.1.14",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.5.2",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.2",
+    "vite": "^6.3.5",
+    "wrangler": "^4.4.0"
+  }
+}

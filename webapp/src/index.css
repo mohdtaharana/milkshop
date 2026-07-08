@@ -1,0 +1,311 @@
+/* ── Google Font — must be first @import ─────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+/* ============================================================
+   MILKSHOP ERP — GLOBAL STYLES
+   Dark theme, Mobile-First, Custom scrollbar, Animations
+   ============================================================ */
+
+/* ── Tailwind dark mode — class-based ──────────────────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── CSS Custom Properties (Design Tokens) ───────────────── */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Light palette */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-accent: #0ea5e9;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  --color-bg: #020617;        /* slate-950 */
+  --color-surface: #0f172a;   /* slate-900 */
+  --color-surface-2: #1e293b; /* slate-800 */
+  --color-border: #1e293b;    /* slate-800 */
+  --color-text: #f1f5f9;      /* slate-100 */
+  --color-text-muted: #94a3b8; /* slate-400 */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+}
+
+/* ── Base Reset & Foundation ───────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Typography ────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* ── Custom Scrollbar ─────────────────────────────────────── */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 99px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: #334155 transparent;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Global thin scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+.dark * {
+  scrollbar-color: #1e293b transparent;
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(37, 99, 235, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease both;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.25s ease both;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.25s ease both;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease both;
+}
+
+/* ── Glass Effect ─────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Card Styles ──────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.dark .card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Button Focus Styles ──────────────────────────────────── */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Form Inputs ──────────────────────────────────────────── */
+input, select, textarea {
+  font-family: var(--font-sans);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* ── Mobile-first layout helpers ─────────────────────────── */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Touch-friendly minimum tap targets */
+@media (max-width: 768px) {
+  button, a[role="button"], [role="button"] {
+    min-height: 40px;
+  }
+}
+
+/* ── Table Responsive ─────────────────────────────────────── */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
+}
+
+/* ── Badge / Status Pills ─────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.badge-green  { background: #d1fae5; color: #065f46; }
+.badge-red    { background: #fee2e2; color: #991b1b; }
+.badge-amber  { background: #fef3c7; color: #92400e; }
+.badge-blue   { background: #dbeafe; color: #1e40af; }
+.badge-slate  { background: #f1f5f9; color: #475569; }
+
+.dark .badge-green  { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.dark .badge-red    { background: rgba(239, 68, 68, 0.15);  color: #f87171; }
+.dark .badge-amber  { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.dark .badge-blue   { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.dark .badge-slate  { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+/* ── Skeleton Loader ──────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-2) 25%,
+    var(--color-border) 50%,
+    var(--color-surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+/* ── Recharts Dark Mode Fixes ─────────────────────────────── */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: #1e293b;
+}
+
+.dark .recharts-text {
+  fill: #64748b;
+}
+
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* ── Dark mode color overrides for Tailwind v4 ─────────────── */
+
+
+/* ── Print Styles ─────────────────────────────────────────── */
+@media print {
+  .sidebar, .navbar, button { display: none !important; }
+  body { background: white !important; color: black !important; }
+}
+
+/* ── Selection Color ──────────────────────────────────────── */
+::selection {
+  background: rgba(37, 99, 235, 0.2);
+  color: inherit;
+}
+
+.dark ::selection {
+  background: rgba(96, 165, 250, 0.25);
+}
