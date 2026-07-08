@@ -24,6 +24,7 @@ import { ExpensesView } from "./components/ExpensesView";
 import { StaffView } from "./components/StaffView";
 import { SettingsView } from "./components/SettingsView";
 import { LoginView } from "./components/LoginView";
+import { InstallPrompt } from "./components/InstallPrompt";
 
 // Loading Spinner
 const LoadingScreen: React.FC = () => (
@@ -142,6 +143,7 @@ const MainLayout: React.FC = () => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+        <InstallPrompt />
       </div>
     </div>
   );
