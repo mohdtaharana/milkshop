@@ -27,7 +27,7 @@ export const SettingsView: React.FC = () => {
   // Settings Forms
   const [shopName, setShopName] = useState("Subhanallah Milk Shop");
   const [shopPhone, setShopPhone] = useState("0300-1234567");
-  const [shopAddress, setShopAddress] = useState("Main Bazaar Samanabad, Lahore");
+  const [shopAddress, setShopAddress] = useState("");
   const [easyPaisa, setEasyPaisa] = useState("0300-1234567");
   const [tax, setTax] = useState(0);
   const [greeting, setGreeting] = useState("JAZAKALLAH KHAYRAN FOR YOUR VISIT!");

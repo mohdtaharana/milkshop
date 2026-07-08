@@ -608,7 +608,7 @@ export const DeliveryView: React.FC = () => {
                   </div>
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Full Address Line</label>
-                    <input type="text" value={formAddressLine} onChange={e => setFormAddressLine(e.target.value)} placeholder="House 24, Street 2, Samanabad, Lahore" className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
+                    <input type="text" value={formAddressLine} onChange={e => setFormAddressLine(e.target.value)} placeholder="House 24, Street 2, Area Name" className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
                   </div>
                 </div>
 

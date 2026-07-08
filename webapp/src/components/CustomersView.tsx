@@ -37,7 +37,7 @@ export const CustomersView: React.FC = () => {
   const [formAltPhone, setFormAltPhone] = useState("");
   const [formAddress, setFormAddress] = useState("");
   const [formArea, setFormArea] = useState("");
-  const [formCity, setFormCity] = useState("Lahore");
+  const [formCity, setFormCity] = useState("");
   const [formCnic, setFormCnic] = useState("");
   const [formType, setFormType] = useState<CustomerType>(CustomerType.RESIDENTIAL);
   const [formQtyM, setFormQtyM] = useState<number>(2);
