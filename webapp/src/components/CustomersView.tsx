@@ -8,7 +8,7 @@ import { useApp } from "../context/AppContext";
 import { ModalPortal } from "./ModalPortal";
 import { Customer, CustomerType } from "../types";
 import { 
-  Plus, Search, User2, MapPin, Phone, CreditCard, 
+  Plus, Search, User2, MapPin, Phone,
   Trash2, X, DollarSign, Wallet, Eye
 } from "lucide-react";
 
@@ -43,9 +43,7 @@ export const CustomersView: React.FC = () => {
   const [formQtyM, setFormQtyM] = useState<number>(2);
   const [formQtyE, setFormQtyE] = useState<number>(2);
   const [formRate, setFormRate] = useState<number>(190);
-  const [formCreditLimit, setFormCreditLimit] = useState<number>(20000);
   const [formAdvance, setFormAdvance] = useState<number>(0);
-  const [formRoute, setFormRoute] = useState("ROUTE-01");
   const [formNotes, setFormNotes] = useState("");
   const [formError, setFormError] = useState("");
 
@@ -80,9 +78,7 @@ export const CustomersView: React.FC = () => {
       dailyQtyEvening: Number(formQtyE),
       rate: Number(formRate),
       advancePayment: Number(formAdvance),
-      creditLimit: Number(formCreditLimit),
       deliveryAddress: formAddress,
-      deliveryRouteId: formRoute,
       status: "Active",
       notes: formNotes
     });
@@ -109,8 +105,7 @@ export const CustomersView: React.FC = () => {
       cnic: formCnic || "N/A", type: formType,
       dailyQtyMorning: Number(formQtyM), dailyQtyEvening: Number(formQtyE),
       rate: Number(formRate), advancePayment: Number(formAdvance),
-      creditLimit: Number(formCreditLimit), deliveryAddress: formAddress,
-      deliveryRouteId: formRoute, notes: formNotes,
+      deliveryAddress: formAddress, notes: formNotes,
     });
 
     resetForm();
@@ -122,7 +117,7 @@ export const CustomersView: React.FC = () => {
     setFormName(""); setFormFather(""); setFormPhone(""); setFormAltPhone("");
     setFormAddress(""); setFormArea(""); setFormCnic("");
     setFormQtyM(2); setFormQtyE(2); setFormRate(190);
-    setFormCreditLimit(20000); setFormAdvance(0); setFormNotes("");
+    setFormAdvance(0); setFormNotes("");
   };
 
   const openEditModal = (cust: Customer) => {
@@ -131,8 +126,7 @@ export const CustomersView: React.FC = () => {
     setFormAddress(cust.address); setFormArea(cust.area); setFormCity(cust.city);
     setFormCnic(cust.cnic); setFormType(cust.type);
     setFormQtyM(cust.dailyQtyMorning); setFormQtyE(cust.dailyQtyEvening);
-    setFormRate(cust.rate); setFormCreditLimit(cust.creditLimit);
-    setFormAdvance(cust.advancePayment); setFormRoute(cust.deliveryRouteId);
+    setFormRate(cust.rate); setFormAdvance(cust.advancePayment);
     setFormNotes(cust.notes || "");
     setEditingCustId(cust.id);
     setShowEditModal(true);
@@ -264,7 +258,7 @@ export const CustomersView: React.FC = () => {
             </div>
 
             <div className="p-3 bg-white dark:bg-slate-950 border border-gray-100 dark:border-slate-800 rounded-xl flex items-center gap-3">
-              <CreditCard className="w-8 h-8 text-amber-500 shrink-0" />
+              <DollarSign className="w-8 h-8 text-amber-500 shrink-0" />
               <div>
                 <p className="text-[10px] text-gray-500 font-mono uppercase">Rate Applied</p>
                 <h4 className="text-base font-black text-gray-900 dark:text-white">
@@ -302,7 +296,6 @@ export const CustomersView: React.FC = () => {
                 </div>
                 <div className="p-3 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-xl space-y-1.5">
                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">Account Limits</p>
-                  <p className="text-[11px] text-slate-700 dark:text-slate-300">Credit Limit: <span className="font-bold text-rose-500">{formatCurrency(selectedCustomer.creditLimit)}</span></p>
                   <p className="text-[11px] text-slate-700 dark:text-slate-300">Last Payment: <span className="font-mono font-bold">{selectedCustomer.lastPaymentDate || "Never"}</span></p>
                 </div>
                 {selectedCustomer.notes && (
@@ -425,9 +418,8 @@ export const CustomersView: React.FC = () => {
                       </td>
                       <td className="p-4 text-right">
                         <div className={`font-black font-sans ${cust.remainingBalance > 0 ? "text-rose-500" : cust.remainingBalance < 0 ? "text-emerald-500" : "text-gray-400"}`}>
-                           {cust.remainingBalance > 0 ? `+${formatCurrency(cust.remainingBalance)}` : cust.remainingBalance < 0 ? `${formatCurrency(cust.remainingBalance)} (Adv)` : "Balanced"}
+                         {cust.remainingBalance > 0 ? `+${formatCurrency(cust.remainingBalance)}` : cust.remainingBalance < 0 ? `${formatCurrency(cust.remainingBalance)} (Adv)` : "Balanced"}
                         </div>
-                        <div className="text-[9px] text-gray-400 font-mono">Limit: Rs. {cust.creditLimit}</div>
                       </td>
                       <td className="p-4 text-center">
                         <button
@@ -562,7 +554,7 @@ export const CustomersView: React.FC = () => {
                   Business Contract Parameters
                 </p>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Customer Type</label>
                     <select 
@@ -577,17 +569,6 @@ export const CustomersView: React.FC = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-mono uppercase text-gray-500 block">Delivery Route</label>
-                    <input
-                      type="text"
-                      value={formRoute}
-                      onChange={(e) => setFormRoute(e.target.value)}
-                      placeholder="e.g. Samanabad Route"
-                      className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Rate per Litre (PKR)</label>
                     <input 
                       type="number" 
@@ -598,7 +579,7 @@ export const CustomersView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Morning Qty (Ltr)</label>
                     <input 
@@ -614,15 +595,6 @@ export const CustomersView: React.FC = () => {
                       type="number" 
                       value={formQtyE}
                       onChange={(e) => setFormQtyE(Number(e.target.value))}
-                      className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-mono uppercase text-gray-500 block">Credit Limit (PKR)</label>
-                    <input 
-                      type="number" 
-                      value={formCreditLimit}
-                      onChange={(e) => setFormCreditLimit(Number(e.target.value))}
                       className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                     />
                   </div>
@@ -726,7 +698,7 @@ export const CustomersView: React.FC = () => {
 
               <div className="p-4 bg-gray-50 dark:bg-slate-950/60 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
                 <p className="text-xs font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-1">Business Parameters</p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Type</label>
                     <select value={formType} onChange={(e) => setFormType(e.target.value as CustomerType)} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white cursor-pointer">
@@ -737,12 +709,8 @@ export const CustomersView: React.FC = () => {
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Rate/L (PKR)</label>
                     <input type="number" value={formRate} onChange={(e) => setFormRate(Number(e.target.value))} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-mono uppercase text-gray-500 block">Route</label>
-                    <input type="text" value={formRoute} onChange={(e) => setFormRoute(e.target.value)} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
-                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Morning Qty</label>
                     <input type="number" value={formQtyM} onChange={(e) => setFormQtyM(Number(e.target.value))} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
@@ -750,10 +718,6 @@ export const CustomersView: React.FC = () => {
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Evening Qty</label>
                     <input type="number" value={formQtyE} onChange={(e) => setFormQtyE(Number(e.target.value))} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-mono uppercase text-gray-500 block">Credit Limit</label>
-                    <input type="number" value={formCreditLimit} onChange={(e) => setFormCreditLimit(Number(e.target.value))} className="w-full h-10 px-3 border border-slate-200 dark:border-slate-700 rounded-xl text-xs bg-slate-50 dark:bg-slate-950 focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white" />
                   </div>
                   <div className="space-y-1">
                     <label className="text-[11px] font-mono uppercase text-gray-500 block">Advance</label>

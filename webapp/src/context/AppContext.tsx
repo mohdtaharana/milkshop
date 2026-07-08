@@ -155,7 +155,7 @@ interface AppContextProps {
   formatDate: (dateStr: string) => string;
 
   // Actions
-  addCustomer: (cust: Omit<Customer, "id" | "remainingBalance" | "monthlyBillEstimate">) => Promise<void>;
+  addCustomer: (cust: Omit<Customer, "id" | "remainingBalance" | "monthlyBillEstimate" | "creditLimit" | "deliveryRouteId"> & { creditLimit?: number; deliveryRouteId?: string }) => Promise<void>;
   updateCustomer: (id: string, cust: Partial<Customer>) => Promise<void>;
   deleteCustomer: (id: string) => Promise<void>;
 
