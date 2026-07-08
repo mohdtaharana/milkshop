@@ -17,7 +17,6 @@ export const InstallPrompt: React.FC = () => {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(iOS);
 
-    // Already installed? hide
     if (window.matchMedia("(display-mode: standalone)").matches) {
       setDismissed(true);
       return;
@@ -27,7 +26,6 @@ export const InstallPrompt: React.FC = () => {
       return;
     }
 
-    // Listen for beforeinstallprompt (Chrome/Android/Desktop)
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -35,12 +33,15 @@ export const InstallPrompt: React.FC = () => {
     };
     window.addEventListener("beforeinstallprompt", handler);
 
-    // iOS doesn't have beforeinstallprompt, so show manually
-    if (iOS) {
-      setShowBanner(true);
-    }
+    // Fallback: show banner after 4s regardless of beforeinstallprompt
+    const timeout = setTimeout(() => {
+      if (!dismissed) setShowBanner(true);
+    }, 4000);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      clearTimeout(timeout);
+    };
   }, []);
 
   const handleInstall = async () => {
@@ -54,7 +55,6 @@ export const InstallPrompt: React.FC = () => {
 
   if (dismissed || !showBanner) return null;
 
-  // Help screen (iOS instructions or generic help)
   if (showHelp) {
     return (
       <div className="fixed bottom-4 left-4 right-4 z-[60] max-w-md mx-auto">
@@ -80,7 +80,6 @@ export const InstallPrompt: React.FC = () => {
     );
   }
 
-  // Main install banner
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto">
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 flex items-center justify-between">
