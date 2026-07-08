@@ -253,11 +253,34 @@ export const DeliveryView: React.FC = () => {
                 {selectedCust.name.charAt(0)}
               </div>
               <div>
-                <h2 className="text-lg font-bold">{selectedCust.name}</h2>
+                <h2 className="text-lg font-bold flex items-center gap-2">
+                  {selectedCust.name}
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                    selectedCust.deliveryTime === "Morning"
+                      ? "bg-amber-500/20 text-amber-300"
+                      : selectedCust.deliveryTime === "Evening"
+                        ? "bg-indigo-500/20 text-indigo-300"
+                        : "bg-blue-500/20 text-blue-300"
+                  }`}>
+                    <Clock className="w-3 h-3" />
+                    {selectedCust.deliveryTime}
+                  </span>
+                </h2>
                 <p className="text-xs text-slate-400">{selectedCust.phone} {selectedCust.altPhone ? `• ${selectedCust.altPhone}` : ""}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => {
+                  const today = todayStr();
+                  const existing = custRecords.find(r => r.date === today);
+                  toggleRecord(today, existing);
+                }}
+                className="px-3.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-500/25"
+              >
+                <Droplets className="w-3.5 h-3.5" />
+                <span>Mark Today</span>
+              </button>
               <button
                 onClick={() => openEditDelCust(selectedCust)}
                 className="px-3 py-1.5 text-xs font-semibold bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-lg flex items-center gap-1 cursor-pointer"
@@ -266,7 +289,7 @@ export const DeliveryView: React.FC = () => {
               </button>
               <button
                 onClick={() => setShowPayModal(true)}
-                className="px-3.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-500/25"
+                className="px-3.5 py-1.5 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-lg flex items-center gap-1.5 cursor-pointer shadow-md shadow-amber-500/25"
               >
                 <DollarSign className="w-3.5 h-3.5" />
                 <span>Receive Payment</span>
@@ -511,13 +534,14 @@ export const DeliveryView: React.FC = () => {
                   <th className="p-4 text-center">Qty (L)</th>
                   <th className="p-4 text-center">Time</th>
                   <th className="p-4 text-right">Pending</th>
+                  <th className="p-4 text-center">Status</th>
                   <th className="p-4 text-center">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-slate-400">No delivery customers found</td>
+                    <td colSpan={8} className="text-center py-12 text-slate-400">No delivery customers found</td>
                   </tr>
                 ) : (
                   filtered.map(c => (
@@ -529,20 +553,72 @@ export const DeliveryView: React.FC = () => {
                       <td className="p-4 font-mono text-slate-600 dark:text-slate-400">{c.phone}</td>
                       <td className="p-4 text-slate-600 dark:text-slate-400">{(c.colony || c.sector || c.street) ? [c.colony, c.sector, c.street].filter(Boolean).join(", ") : "—"}</td>
                       <td className="p-4 text-center font-bold text-slate-900 dark:text-white">{c.milkQuantity}L</td>
-                      <td className="p-4 text-center text-slate-600 dark:text-slate-400">{c.deliveryTime}</td>
+                      <td className="p-4 text-center">
+                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold ${
+                          c.deliveryTime === "Morning"
+                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                            : c.deliveryTime === "Evening"
+                              ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
+                              : "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                        }`}>
+                          <Clock className="w-3 h-3" />
+                          {c.deliveryTime}
+                        </span>
+                      </td>
                       <td className="p-4 text-right">
-                        <span className={`font-black font-sans ${c.pendingBalance > 0 ? "text-rose-500" : c.pendingBalance < 0 ? "text-emerald-500" : "text-gray-400"}`}>
-                          {c.pendingBalance > 0 ? formatCurrency(c.pendingBalance) : c.pendingBalance < 0 ? `${formatCurrency(Math.abs(c.pendingBalance))} Adv` : "Clear"}
+                        <div className={`font-black font-sans ${
+                          c.pendingBalance > 0
+                            ? "text-rose-500"
+                            : c.pendingBalance < 0
+                              ? "text-emerald-500"
+                              : "text-gray-400"
+                        }`}>
+                          {c.pendingBalance > 0
+                            ? formatCurrency(c.pendingBalance)
+                            : c.pendingBalance < 0
+                              ? `${formatCurrency(Math.abs(c.pendingBalance))} Adv`
+                              : "—"}
+                        </div>
+                        <div className="text-[9px] text-slate-400 font-mono mt-0.5">
+                          {c.billType === "fixed_monthly" ? `Rs.${c.monthlyFee}/mo` : `Rs.${c.monthlyRate}/L`}
+                        </div>
+                      </td>
+                      <td className="p-4 text-center">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                          c.status === "Active"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                            : "bg-slate-500/10 text-slate-500"
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            c.status === "Active" ? "bg-emerald-500" : "bg-slate-400"
+                          }`} />
+                          {c.status || "Active"}
                         </span>
                       </td>
                       <td className="p-4 text-center">
-                        <button
-                          onClick={() => setSelectedCustId(c.id)}
-                          className="px-2.5 py-1.5 text-[11px] font-bold bg-blue-500/10 hover:bg-blue-600 text-blue-600 dark:text-blue-400 hover:text-white border border-blue-500/10 rounded-lg transition-all cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5 inline mr-1" />
-                          Details
-                        </button>
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={() => setSelectedCustId(c.id)}
+                            className="px-2.5 py-1.5 text-[11px] font-bold bg-blue-500/10 hover:bg-blue-600 text-blue-600 dark:text-blue-400 hover:text-white border border-blue-500/10 rounded-lg transition-all cursor-pointer"
+                          >
+                            <Eye className="w-3.5 h-3.5 inline mr-1" />
+                            Details
+                          </button>
+                          <button
+                            onClick={() => openEditDelCust(c)}
+                            className="p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+                            title="Edit"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                          </button>
+                          <button
+                            onClick={() => { if (confirm("Delete this customer and all records?")) { deleteDeliveryCustomer(c.id); } }}
+                            className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-md transition-colors cursor-pointer"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
