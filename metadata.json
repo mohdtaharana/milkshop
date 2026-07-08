@@ -1,0 +1,6 @@
+{
+  "name": "SUBHANALLAH Milk Shop Management System",
+  "description": "A premium digitised ERP and Management System for a modern Pakistani milk shop, with bilingual English/Urdu support, role-based dashboards, inventory tracking, collection records, and reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
